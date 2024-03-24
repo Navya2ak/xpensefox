@@ -1,6 +1,6 @@
-import User from "../../models/user";
-import Xpense from "../../models/xpense";
-import XpenseCard from "../../models/xpense_card";
+import User from "../../database/models/user";
+import Xpense from "../../database/models/xpense";
+import XpenseCard from "../../database/models/xpense_card";
 export class XpenseService {
   constructor() {}
 
@@ -15,20 +15,20 @@ export class XpenseService {
       budget: data.budget ?? data.budget,
       is_active: data.is_active ?? data.is_active,
     };
-     await XpenseCard.update(updatingData, {
+    await XpenseCard.update(updatingData, {
       where: {
         userId: data.userId,
-        id:data.cardId
+        id: data.cardId,
       },
     });
     return "User Details Updated";
   }
 
   async deletexpenseCard(data: any) {
-    await XpenseCard.destroy( {
+    await XpenseCard.destroy({
       where: {
         userId: data.userId,
-        id:data.cardId
+        id: data.cardId,
       },
     });
     return "Card Removed";

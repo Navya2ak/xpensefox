@@ -1,14 +1,30 @@
-import User from "../../models/user";
+import User from "../../database/models/user";
 import {HashService} from "./hash";
 const hashService = new HashService();
 export class UserService {
   constructor() {}
 
-  async createUser(data: any) {
+  async signUp(data: any) {
     if (!data.name || !data.email || !data.password) throw Error("params missing");
     data.password = await hashService.genHash(data.password);
     if (await this.findUserByEmail(data.email)) throw Error("user already exist given mail id!!!");
     return await User.create(data);
+  }
+
+  async signIn(data: any) {
+    if (!data.email || !data.password) throw Error("params missing");
+    let user: any;
+    user =
+      (await this.findUserByEmail(data.email)) ||
+      (() => {
+        throw new Error("User does not exist");
+      })();
+    (await hashService.compareHash(data.password, user.password))
+      ? true
+      : (() => {
+          throw new Error("Wrong Password");
+        })();
+    return hashService.getToken(user);
   }
 
   async getProfile(userId: any) {
@@ -44,6 +60,7 @@ export class UserService {
       where: {
         email,
       },
+      raw: true,
     });
   }
 }

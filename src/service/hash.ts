@@ -1,14 +1,24 @@
-const bcrypt = require("bcrypt");
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 const saltRounds = 10;
+const secretKey = "sdfaasfasdfasdfasfsdfasdf";
 
 export class HashService {
   constructor() {}
 
-  genHash(string: any) {
+  async genHash(string: any) {
     return bcrypt.hash(string, saltRounds);
   }
 
-  compareHash(string: any, hash: any) {
+  async compareHash(string: any, hash: any) {
     return bcrypt.compare(string, hash);
+  }
+
+  getToken(data: any) {
+    return jwt.sign(JSON.stringify(data), secretKey);
+  }
+
+  verifyToken(token: any) {
+    return jwt.verify(token, secretKey);
   }
 }
