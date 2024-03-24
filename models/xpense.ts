@@ -1,11 +1,10 @@
-import {DataTypes, Model, UUIDV4} from "sequelize";
-import {sequelize} from "./index";
+import { DataTypes, Model, UUIDV4 } from "sequelize";
+import { sequelize } from "./index";
 
 class Xpense extends Model {
-  // static associate(models: any) {
-  //   this.belongsTo(models.User, {foreignKey: "userId"});
-  //   this.belongsTo(models.XpenseCard, {foreignKey: "cardId"});
-  // }
+  static associate(models: any) {
+    Xpense.belongsTo(models.XpenseCard, { foreignKey: "cardId", as: "xpense_cards" });
+  }
 }
 
 Xpense.init(
@@ -15,13 +14,21 @@ Xpense.init(
       primaryKey: true,
       defaultValue: UUIDV4,
     },
-    userId: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
     cardId: {
-      type: DataTypes.STRING,
+      type: DataTypes.UUID,
       allowNull: false,
+      references: {
+        model: 'xpense_cards',
+        key: 'id'
+      }
+    },
+    userId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+      references: {
+        model: 'users',
+        key: 'id'
+      }
     },
     amount: {
       type: DataTypes.NUMBER,
@@ -31,8 +38,7 @@ Xpense.init(
   {
     sequelize,
     modelName: "Xpense",
-    tableName: "xpense",
+    tableName: "xpenses", 
   },
 );
-
 export default Xpense;

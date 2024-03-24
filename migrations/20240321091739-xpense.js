@@ -2,7 +2,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("xpense", {
+    await queryInterface.createTable("xpenses", {
       id: {
         allowNull: false,
         primaryKey: true,
@@ -12,8 +12,11 @@ module.exports = {
       userId: {
         type: Sequelize.UUID,
         references: {
-          model: "users",
-          key: "id",
+          model: {
+            tableName: 'users',
+            schema: 'public'
+          },
+          key: 'id',
         },
         onUpdate: "CASCADE",
         onDelete: "CASCADE",
@@ -21,12 +24,16 @@ module.exports = {
       cardId: {
         type: Sequelize.UUID,
         references: {
-          model: "xpense_cards",
-          key: "id",
+          model: {
+            tableName: 'xpense_cards',
+            schema: 'public'
+          },
+          key: 'id',
         },
         onUpdate: "CASCADE",
         onDelete: "CASCADE",
       },
+
       amount: {
         type: Sequelize.STRING,
       },
@@ -41,6 +48,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable("xpense");
+    await queryInterface.dropTable("xpenses");
   },
 };

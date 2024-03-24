@@ -1,3 +1,4 @@
+import User from "../../models/user";
 import Xpense from "../../models/xpense";
 import XpenseCard from "../../models/xpense_card";
 export class XpenseService {
@@ -32,8 +33,21 @@ export class XpenseService {
     });
     return "Card Removed";
   }
-  listxpenseCards() {}
-  fetchxpense() {}
+  async listxpenseCards(data:any) {
+   let cards= await XpenseCard.findAll({
+      where: {
+        userId: data.userId,
+            },
+            include:[
+             { model: User,
+                as:'users'}
+            ]
+    });
+    return cards
+  }
+  fetchxpense() {
+
+  }
   async addxpense(data: any) {
     if (!data.userId || !data.cardId || !data.amount) throw Error("params missing");
     return await Xpense.create(data);
