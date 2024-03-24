@@ -45,7 +45,7 @@ export class XpenseController {
   }
   async listxpenseCards(req: any, res: any) {
     try {
-      const response = await xpenseService.listxpenseCards();
+      const response = await xpenseService.listxpenseCards(req.body);
       res.status(StatusCodes.OK).send({
         response,
       });

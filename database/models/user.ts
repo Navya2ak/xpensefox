@@ -2,9 +2,9 @@ import {DataTypes, Model, UUIDV4} from "sequelize";
 import {sequelize} from "./index";
 
 class User extends Model {
-  // static associate(models: any) {
-  //   this.hasMany(models.XpenseCard, {foreignKey: "userId"});
-  // }
+  static associate(models: any) {
+    this.hasMany(models.XpenseCard, { foreignKey: "userId", as: "xpense_cards" });
+  }
 }
 
 User.init(
